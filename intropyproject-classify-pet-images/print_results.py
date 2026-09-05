@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/print_results.py
 #                                                                             
-# PROGRAMMER: 
-# DATE CREATED:
+# PROGRAMMER: HRIDAYA
+# DATE CREATED: 2026-09-05
 # REVISED DATE: 
 # PURPOSE: Create a function print_results that prints the results statistics
 #          from the results statistics dictionary (results_stats_dic). It 
@@ -62,5 +62,28 @@ def print_results(results_dic, results_stats_dic, model,
     Returns:
            None - simply printing results.
     """    
-    None
+    print(f"\n\n*** Results Summary for CNN Model Architecture {model.upper()} ***")
+    print(f"{'N Images':20}: {results_stats_dic['n_images']:3d}")
+    print(f"{'N Dog Images':20}: {results_stats_dic['n_dogs_img']:3d}")
+    print(f"{'N Not-Dog Images':20}: {results_stats_dic['n_notdogs_img']:3d}")
+    
+    print(" ")
+    for key in results_stats_dic:
+        if key.startswith('p'):
+            print(f"{key:20}: {results_stats_dic[key]:.1f}")
+            
+    if (print_incorrect_dogs and 
+        (results_stats_dic['n_correct_dogs'] + results_stats_dic['n_correct_notdogs']
+          != results_stats_dic['n_images'])):
+        print("\nINCORRECT Dog/NOT Dog Assignments:")
+        for key in results_dic:
+            if sum(results_dic[key][3:]) == 1:
+                print(f"Real: {results_dic[key][0]:>26}   Classifier: {results_dic[key][1]:>30}")
+                
+    if (print_incorrect_breed and 
+        (results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed'])):
+        print("\nINCORRECT Dog Breed Assignment:")
+        for key in results_dic:
+            if sum(results_dic[key][3:]) == 2 and results_dic[key][2] == 0:
+                print(f"Real: {results_dic[key][0]:>26}   Classifier: {results_dic[key][1]:>30}")
                 
